@@ -2,7 +2,7 @@
 #Info: Pause the printer at a certain height for a certain length of time.
 #Depend: GCode
 #Type: postprocess
-#Param: pauseLevel(float:5.0) Pause height (mm)
+#Param: pauseLevel(float:5.0) Layer to pause after
 #Param: parkDuration(int:60) Duration of pause (s)
 #Param: parkX(float:0) Head park X (mm)
 #Param: parkY(float:0) Head park Y (mm)
@@ -68,7 +68,7 @@ with open(filename, "w") as f:
 				lastLayerIndex = currentLayer
 				if pauseState == 1:
 					layerZ = getPrintZValue(lines[lIndex:lIndex+20])
-					if layerZ >= pauseLevel:
+					if currentLayer == pauseLevel:
 						pauseState = 2
 
 			f.write(line)
