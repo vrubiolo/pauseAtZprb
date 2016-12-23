@@ -2,7 +2,7 @@
 #Info: Pause the printer at a certain height for a certain length of time.
 #Depend: GCode
 #Type: postprocess
-#Param: pauseLevel(float:5.0) Layer to pause after
+#Param: pauseLevel(float:10) Layer to pause after
 #Param: parkDuration(int:60) Duration of pause (s)
 #Param: parkX(float:0) Head park X (mm)
 #Param: parkY(float:0) Head park Y (mm)
@@ -114,9 +114,11 @@ with open(filename, "w") as f:
 				f.write("M84 E0\n")
 				#Pause for the desired number of seconds
 				f.write("G4 P%s000\n" % (str(parkDuration)))
+                                f.write(";vrubiolo: extrude 40mm to prime extruder\n")
+                                f.write("G1 E40\n")
 				#Push the filament back, and retract again, the properly primes the nozzle when changing filament.
-				f.write("G1 E%f F6000\n" % (retractAmount))
-				f.write("G1 E-%f F6000\n" % (retractAmount))
+				#f.write("G1 E%f F6000\n" % (retractAmount))
+				#f.write("G1 E-%f F6000\n" % (retractAmount))
 
 				#Move the head back. Move Z at the same time to prevent hitting the glass locks on the UM2
 				if zChanged :
@@ -124,7 +126,7 @@ with open(filename, "w") as f:
 				else:
 					f.write("G1 X%f Y%f F9000\n" % (x, y))
 
-				f.write("G1 E%f F6000\n" % (retractAmount))
+				#f.write("G1 E%f F6000\n" % (retractAmount))
 				f.write("G1 F9000\n")
 				f.write("M82\n")
 
